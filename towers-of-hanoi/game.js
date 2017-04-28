@@ -31,13 +31,35 @@ class Game {
     });
   }
 
+  isValidMove(startTowerIdx, endTowerIdx) {
+    return !this.isEmpty(startTowerIdx) && (this.isEmpty(endTowerIdx) ||
+            this.getLast(startTowerIdx) < this.getLast(endTowerIdx));
+  }
+
+  isEmpty(towerIdx) {
+    return this.stacks[towerIdx].length === 0;
+  }
+
+  getLast(towerIdx) {
+    return this.stacks[towerIdx][this.stacks[towerIdx].length - 1];
+  }
+
   close() {
     this.reader.close();
   }
 }
 
 const game = new Game();
-game.promptMove((start, end) => {
-  console.log(`Start: ${start}, End: ${end}`);
-  game.close();
-});
+// // game.promptMove((start, end) => {
+// //   console.log(`Start: ${start}, End: ${end}`);
+// //   game.close();
+// // });
+// game.close();
+//
+// console.log(game.isValidMove(0, 1));
+// console.log(game.isValidMove(0, 2));
+// console.log(!game.isValidMove(1, 0));
+//
+// game.stacks[1].push(game.stacks[0].pop());
+// console.log(game.isValidMove(0, 2));
+// console.log(!game.isValidMove(0, 1));
