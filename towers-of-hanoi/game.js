@@ -3,10 +3,6 @@ const readline = require("readline");
 class Game {
   constructor() {
     this.stacks = [[3, 2, 1], [], []];
-    this.reader = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
   }
 
   dumpStacks() {
@@ -17,12 +13,12 @@ class Game {
     console.log("");
   }
 
-  promptMove(callback) {
+  promptMove(reader, callback) {
     this.dumpStacks();
 
-    const rd = this.reader;
-    rd.question("Enter the tower to take from: ", function (startInd) {
-      rd.question("Enter the tower to move to: ", function (endInd) {
+    // const rd = this.reader;
+    reader.question("Enter the tower to take from: ", function (startInd) {
+      reader.question("Enter the tower to move to: ", function (endInd) {
         const start = parseInt(startInd);
         const end = parseInt(endInd);
 
@@ -58,12 +54,25 @@ class Game {
                                this.stacks[2].length === 3);
   }
 
-  close() {
-    this.reader.close();
+  run(reader, completionCallback) {
+    const game = this;
+
+    game.promptMove(reader, function (start, end) {
+      if (!game.move(start, end)) { console.log("Invalid move!"); }
+
+      if (!game.isWon()) {
+        game.run(reader, completionCallback);
+      } else {
+        console.log("You won!");
+        completionCallback();
+      }
+    });
   }
 }
 
-const game = new Game();
+module.exports = Game;
+// const game = new Game();
+// game.run();
 // // game.promptMove((start, end) => {
 // //   console.log(`Start: ${start}, End: ${end}`);
 // //   game.close();
