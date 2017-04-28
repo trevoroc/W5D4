@@ -26,7 +26,7 @@ class Game {
         const start = parseInt(startInd);
         const end = parseInt(endInd);
 
-        callback(startInd, endInd);
+        callback(startInd - 1, endInd - 1);
       });
     });
   }
@@ -36,12 +36,26 @@ class Game {
             this.getLast(startTowerIdx) < this.getLast(endTowerIdx));
   }
 
+  move(startTowerIdx, endTowerIdx) {
+    if(this.isValidMove(startTowerIdx, endTowerIdx)) {
+      this.stacks[endTowerIdx].push(this.stacks[startTowerIdx].pop());
+      return true;
+    }
+
+    return false;
+  }
+
   isEmpty(towerIdx) {
     return this.stacks[towerIdx].length === 0;
   }
 
   getLast(towerIdx) {
     return this.stacks[towerIdx][this.stacks[towerIdx].length - 1];
+  }
+
+  isWon() {
+    return this.isEmpty(0) && (this.stacks[1].length === 3 ||
+                               this.stacks[2].length === 3);
   }
 
   close() {
